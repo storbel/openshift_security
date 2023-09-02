@@ -87,12 +87,26 @@ if ($weatherArray['cod'] == 200) {
 
 
 
-    <div class="container mt-8">
+    <div class="container mt-12">
     <!-- Weather form -->
     <!-- ... -->
+<div class="container mt-3">
+    <!-- Weather form -->
+    <div class="mb-4">
+        <form action="" method="post" class="form-inline">
+            <input type="text" name="city" class="form-control mr-2" placeholder="Enter city name">
+            <button type="submit" class="btn btn-primary">Get Temperature</button>
+        </form>
+        <?php if ($weather): ?>
+            <p class="mt-3"><?php echo $weather; ?></p>
+        <?php endif; ?>
+    </div>
+    
+    <!-- The rest of the application status content -->
 
+</div>
     <!-- Weather display -->
-    <div class="card text-white bg-primary mb-4">
+    <div class="card text-white bg-primary mb-3">
         <?php if ($weatherArray['cod'] == 200) {
         echo '<div class="card-header">
             <img src="'.$iconUrl.'" alt="Weather icon">
@@ -114,7 +128,7 @@ if ($weatherArray['cod'] == 200) {
         ?>
     </div>
 
-        <div id="osmMap"  class="card text-white bg-primary mb-4"></div>
+        <div id="osmMap"  class="card text-white bg-primary mb-3"></div>
 
         
     <!-- ... Rest of the application status content ... -->
