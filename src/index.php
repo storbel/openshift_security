@@ -2,7 +2,7 @@
 $hostname = gethostname();
 $appName = getenv('APP_NAME'); 
 $appPort = getenv('APP_PORT') ?: '8080';
-
+$googleMapsApiKey = getenv('GOOGLE_MAPS_API_KEY');
 $otherApps = [
     'appa' => 'appa:' . $appPort,
     'appb' => 'appb:' . $appPort,
@@ -19,9 +19,31 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && !empty($_POST['city'])) {
     $weatherArray = json_decode($weatherData, true);
     if ($weatherArray['cod'] == 200) {
         $weather = "The current temperature in " . $city . " is " . $weatherArray['main']['temp'] . "°C.";
+            $weatherMain = $weatherArray['weather'][0]['main'];
+            $weatherDescription = $weatherArray['weather'][0]['description'];
+            $iconUrl = "http://openweathermap.org/img/w/" . $weatherArray['weather'][0]['icon'] . ".png";
+            $temperature = $weatherArray['main']['temp'];
+            $feelsLike = $weatherArray['main']['feels_like'];
+            $minTemp = $weatherArray['main']['temp_min'];
+            $maxTemp = $weatherArray['main']['temp_max'];
+            $humidity = $weatherArray['main']['humidity'];
+            $pressure = $weatherArray['main']['pressure'];
+            $windSpeed = $weatherArray['wind']['speed'];
+            $cloudiness = $weatherArray['clouds']['all'];
     } else {
         $weather = "Couldn't retrieve the temperature for " . $city . ". Please make sure the city's name is correct.";
     }
+
+
+if ($weatherArray['cod'] == 200) {
+
+} else {
+    // ... Handle errors ...
+}
+
+
+
+    
 }
 
 
@@ -60,27 +82,60 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && !empty($_POST['city'])) {
 </div>
 
 
-<div class="container mt-5">
-    <!-- Weather form -->
-    <div class="mb-4">
-        <form action="" method="post" class="form-inline">
-            <input type="text" name="city" class="form-control mr-2" placeholder="Enter city name">
-            <button type="submit" class="btn btn-primary">Get Temperature</button>
-        </form>
-        <?php if ($weather): ?>
-            <p class="mt-3"><?php echo $weather; ?></p>
-        <?php endif; ?>
-    </div>
-    
-    <!-- The rest of the application status content -->
 
+
+    <div class="container mt-8">
+    <!-- Weather form -->
+    <!-- ... -->
+
+    <!-- Weather display -->
+    <div class="card text-white bg-primary mb-4">
+        <div class="card-header">
+            <img src="<?php echo $iconUrl; ?>" alt="Weather icon">
+            <?php echo $weatherMain; ?> (<?php echo $weatherDescription; ?>)
+        </div>
+        <div class="card-body">
+            <h5 class="card-title">Temperature: <?php echo $temperature; ?>°C</h5>
+            <p class="card-text">Feels like: <?php echo $feelsLike; ?>°C</p>
+            <p class="card-text">Min: <?php echo $minTemp; ?>°C | Max: <?php echo $maxTemp; ?>°C</p>
+            <hr>
+            <p class="card-text">Humidity: <?php echo $humidity; ?>%</p>
+            <p class="card-text">Pressure: <?php echo $pressure; ?> hPa</p>
+            <p class="card-text">Wind Speed: <?php echo $windSpeed; ?> m/s</p>
+            <p class="card-text">Cloudiness: <?php echo $cloudiness; ?>%</p>
+        </div>
+    </div>
+
+        <div id="map"  class="card text-white bg-primary mb-4"></div>
+
+        
+    <!-- ... Rest of the application status content ... -->
 </div>
 
+
+    
     
 <!-- Optional JavaScript -->
 <!-- jQuery, Popper.js, and Bootstrap JS -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=<?php echo  getenv('GOOGLE_MAPS_API_KEY');?>;&callback=initMap"></script>
+
+    <script>
+    function initMap() {
+        var cityLocation = {lat: <?php echo $weatherArray['coord']['lat']; ?>, lng: <?php echo $weatherArray['coord']['lon']; ?>};
+        var map = new google.maps.Map(document.getElementById('map'), {
+            zoom: 10,
+            center: cityLocation
+        });
+        var marker = new google.maps.Marker({
+            position: cityLocation,
+            map: map
+        });
+    }
+</script>
+    
 </body>
 </html>
