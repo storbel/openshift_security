@@ -25,7 +25,7 @@ unset($otherApps[$appName]);
 
 <div class="container mt-5">
     <div class="jumbotron">
-        <h1 class="display-4">Application Status</h1>
+        <h1 class="display-4">Application Status <?php echo $appName; ?></h1>
         <p class="lead">Hostname: <?php echo $hostname; ?></p>
         <hr class="my-4">
         <ul class="list-group">
