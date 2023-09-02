@@ -2,7 +2,7 @@
 $hostname = gethostname();
 $appName = getenv('APP_NAME'); 
 $appPort = getenv('APP_PORT') ?: '8080';
-$googleMapsApiKey = getenv('GOOGLE_MAPS_API_KEY');
+
 $otherApps = [
     'appa' => 'appa:' . $appPort,
     'appb' => 'appb:' . $appPort,
@@ -59,6 +59,9 @@ if ($weatherArray['cod'] == 200) {
     <title>Status Page</title>
     <!-- Bootstrap CSS link -->
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+
 </head>
 <body>
 
@@ -106,7 +109,7 @@ if ($weatherArray['cod'] == 200) {
         </div>
     </div>
 
-        <div id="map"  class="card text-white bg-primary mb-4"></div>
+        <div id="osmMap"  class="card text-white bg-primary mb-4"></div>
 
         
     <!-- ... Rest of the application status content ... -->
@@ -121,20 +124,15 @@ if ($weatherArray['cod'] == 200) {
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
-<script async defer src="https://maps.googleapis.com/maps/api/js?key=<?php echo  getenv('GOOGLE_MAPS_API_KEY');?>;&callback=initMap"></script>
+<script>
+    var map = L.map('osmMap').setView([<?php echo $weatherArray['coord']['lat']; ?>, <?php echo $weatherArray['coord']['lon']; ?>], 13);
 
-    <script>
-    function initMap() {
-        var cityLocation = {lat: <?php echo $weatherArray['coord']['lat']; ?>, lng: <?php echo $weatherArray['coord']['lon']; ?>};
-        var map = new google.maps.Map(document.getElementById('map'), {
-            zoom: 10,
-            center: cityLocation
-        });
-        var marker = new google.maps.Marker({
-            position: cityLocation,
-            map: map
-        });
-    }
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(map);
+
+    L.marker([<?php echo $weatherArray['coord']['lat']; ?>, <?php echo $weatherArray['coord']['lon']; ?>]).addTo(map)
+        .bindPopup("<?php echo $weatherArray['name']; ?>").openPopup();
 </script>
     
 </body>
