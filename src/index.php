@@ -93,20 +93,25 @@ if ($weatherArray['cod'] == 200) {
 
     <!-- Weather display -->
     <div class="card text-white bg-primary mb-4">
-        <div class="card-header">
-            <img src="<?php echo $iconUrl; ?>" alt="Weather icon">
-            <?php echo $weatherMain; ?> (<?php echo $weatherDescription; ?>)
+        <?php if ($weatherArray['cod'] == 200) {
+        echo '<div class="card-header">
+            <img src="'.$iconUrl.'" alt="Weather icon">
+            '.$weatherMain.' ('.$weatherDescription.')
         </div>
         <div class="card-body">
-            <h5 class="card-title">Temperature: <?php echo $temperature; ?>°C</h5>
-            <p class="card-text">Feels like: <?php echo $feelsLike; ?>°C</p>
-            <p class="card-text">Min: <?php echo $minTemp; ?>°C | Max: <?php echo $maxTemp; ?>°C</p>
+            <h5 class="card-title">Temperature: '.$temperature.'°C</h5>
+            <p class="card-text">Feels like: '.$feelsLike.'°C</p>
+            <p class="card-text">Min: '.minTemp.'°C | Max:'.$maxTemp.'°C</p>
             <hr>
-            <p class="card-text">Humidity: <?php echo $humidity; ?>%</p>
-            <p class="card-text">Pressure: <?php echo $pressure; ?> hPa</p>
-            <p class="card-text">Wind Speed: <?php echo $windSpeed; ?> m/s</p>
-            <p class="card-text">Cloudiness: <?php echo $cloudiness; ?>%</p>
-        </div>
+            <p class="card-text">Humidity:'.$humidity.'%</p>
+            <p class="card-text">Pressure: '.$pressure.' hPa</p>
+            <p class="card-text">Wind Speed: '.$windSpeed.' m/s</p>
+            <p class="card-text">Cloudiness: '.$cloudiness.'%</p>
+        </div>';
+        } else {
+        echo "<p class='badge badge-warning'>Couldn't retrieve the temperature for " . $city . ". Please make sure the city's name is correct.</p>";
+    }
+        ?>
     </div>
 
         <div id="osmMap"  class="card text-white bg-primary mb-4"></div>
