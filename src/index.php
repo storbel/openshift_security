@@ -9,6 +9,7 @@ $otherApps = [
     'appc' => 'appc.appc.svc.cluster.local:' . $appPort
 ];
 
+
 unset($otherApps[$appName]); 
 
 if ($_SERVER["REQUEST_METHOD"] == "POST" && !empty($_POST['city'])) {
