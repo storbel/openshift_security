@@ -4,9 +4,9 @@ $appName = getenv('APP_NAME');
 $appPort = getenv('APP_PORT') ?: '8080';
 
 $otherApps = [
-    'appa' => 'appa:' . $appPort,
-    'appb' => 'appb:' . $appPort,
-    'appc' => 'appc:' . $appPort
+    'appa' => 'appa.appa.svc.cluster.local:' . $appPort,
+    'appb' => 'appb.appa.svc.cluster.local:' . $appPort,
+    'appc' => 'appc.appc.svc.cluster.local:' . $appPort
 ];
 
 unset($otherApps[$appName]); 
