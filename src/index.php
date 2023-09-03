@@ -61,6 +61,7 @@ if ($weatherArray['cod'] == 200) {
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
 <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    
 
 </head>
 <body>
@@ -147,14 +148,20 @@ if ($weatherArray['cod'] == 200) {
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
 <script>
-    var map = L.map('osmMap').setView([<?php echo $weatherArray['coord']['lat']; ?>, <?php echo $weatherArray['coord']['lon']; ?>], 13);
+    document.addEventListener("DOMContentLoaded", function() {
+        var lat = <?php echo $weatherArray['coord']['lat']; ?>;
+        var lon = <?php echo $weatherArray['coord']['lon']; ?>;
+        
+        var map = L.map('osmMap').setView([lat, lon], 13);
 
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-    }).addTo(map);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
 
-    L.marker([<?php echo $weatherArray['coord']['lat']; ?>, <?php echo $weatherArray['coord']['lon']; ?>]).addTo(map)
-        .bindPopup("<?php echo $weatherArray['name']; ?>").openPopup();
+        L.marker([lat, lon]).addTo(map)
+            .bindPopup("<?php echo $weatherArray['name']; ?>").openPopup();
+    });
 </script>
     
 </body>
