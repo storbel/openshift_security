@@ -2,11 +2,11 @@
 $hostname = gethostname();
 $appName = getenv('APP_NAME'); 
 $appPort = getenv('APP_PORT') ?: '8080';
-
+$weatherApiKey=getenv('WEATHER_API_KEY') ?: 'fbd6e8e56ebde48ae4e08510a78828d9'; 
 $otherApps = [
-    'appa' => 'appa.appa.svc.cluster.local:' . $appPort,
-    'appb' => 'appb.appa.svc.cluster.local:' . $appPort,
-    'appc' => 'appc.appc.svc.cluster.local:' . $appPort
+    'appa' => 'appa.appa.svc.cluster.local:8080',
+    'appb' => 'appb.appa.svc.cluster.local:8080',
+    'appc' => 'appc.appc.svc.cluster.local:8080'
 ];
 
 
@@ -14,7 +14,7 @@ unset($otherApps[$appName]);
 
 if ($_SERVER["REQUEST_METHOD"] == "POST" && !empty($_POST['city'])) {
     $city = $_POST['city'];
-    $apiKey = getenv('WEATHER_API_KEY');  // Fetch the API key from environment variable
+    $apiKey = $weatherApiKey;  // Fetch the API key from environment variable
     $apiUrl = "http://api.openweathermap.org/data/2.5/weather?q={$city}&appid={$apiKey}&units=metric";
     $weatherData = file_get_contents($apiUrl);
     $weatherArray = json_decode($weatherData, true);
