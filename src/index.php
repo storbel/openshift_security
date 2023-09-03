@@ -107,7 +107,9 @@ if ($weatherArray['cod'] == 200) {
 </div>
     <!-- Weather display -->
     <div class="card text-white bg-primary mb-3">
-        <?php if ($weatherArray['cod'] == 200) {
+        <?php if ($_SERVER["REQUEST_METHOD"] == "POST" && !empty($_POST['city'])) {
+                
+                if ($weatherArray['cod'] == 200) {
         echo '<div class="card-header">
             <img src="'.$iconUrl.'" alt="Weather icon">
             '.$weatherMain.' ('.$weatherDescription.')
@@ -124,6 +126,7 @@ if ($weatherArray['cod'] == 200) {
         </div>';
         } else {
         echo "<p class='badge badge-warning'>Couldn't retrieve the temperature for " . $city . ". Please make sure the city's name is correct.</p>";
+    }
     }
         ?>
     </div>
