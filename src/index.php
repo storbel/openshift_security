@@ -117,7 +117,7 @@ if ($weatherArray['cod'] == 200) {
         <div class="card-body">
             <h5 class="card-title">Temperature: '.$temperature.'°C</h5>
             <p class="card-text">Feels like: '.$feelsLike.'°C</p>
-            <p class="card-text">Min: '.minTemp.'°C | Max:'.$maxTemp.'°C</p>
+            <p class="card-text">Min: '.$minTemp.'°C | Max:'.$maxTemp.'°C</p>
             <hr>
             <p class="card-text">Humidity:'.$humidity.'%</p>
             <p class="card-text">Pressure: '.$pressure.' hPa</p>
