@@ -1,0 +1,36 @@
+provider "kubernetes" {
+  # Depending on your setup, you might provide explicit configuration
+  # or use a kubeconfig file.
+  config_path = "~/.kube/config"
+}
+{% for flow in rules.network_flows.ingress %}
+resource "kubernetes_network_policy" "{{ flow.app }}" {
+  metadata {
+    name = "{{ flow.app }}-networkpolicy"
+    namespace = "{{namespace|default('default')}}"
+  }
+  spec {
+    pod_selector {
+      match_labels = {
+        app = "{{ flow.app }}"
+      }
+    }
+    ingress {
+      {% for app in flow.allow %}
+      
+        from {
+          pod_selector {
+            match_labels = {
+              app = "{{ app }}"
+            }
+          }
+        }
+      
+      {% endfor %}
+    }
+    egress {}
+    policy_types = ["Ingress", "Egress"]
+
+  }
+}
+{% endfor %}
