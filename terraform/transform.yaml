@@ -1,0 +1,41 @@
+---
+- name: Generate Terraform NetworkPolicy from TOML Declaration
+  hosts: localhost
+  vars:
+    network_flows: "rules/namespaces/{{namespace}}/{{namespace}}.yaml"
+  tasks:
+    - name: 'Build network_flows variable from rules/namespaces/{{namespace}}/{{namespace}}.yaml'
+      ansible.builtin.include_vars:
+        file: "{{network_flows}}"
+        name: rules
+    - name: Show context
+      debug:
+        msg: "{{item}}"
+      loop: 
+        - "Working on {{namespace}}, YAML file must be under rules/namespaces/{{namespace}}/{{namespace}}.yaml"
+        - "{{rules}}"
+    - name: Create terraform folder
+      file:
+        path: "tf/{{namespace}}"
+        state: directory
+        recurse: true
+    - name: Transform to Terraform HCL using Template
+      template:
+        src: templates/yaml2hcl.tf.j2
+        dest: "tf/{{namespace}}/main.tf"
+    - name: Transform to Terraform HCL using Template
+      template:
+        src: templates/yaml2hcl.tf.j2
+        dest: "tf/{{namespace}}/main.tf"
+    - name: plan terraform
+      shell:
+        cmd: "{{item}}"
+        chdir: "tf/{{namespace}}"
+      loop:
+        - "terraform validate  -no-color"
+        - "terraform init  -no-color"
+        - "terraform plan -no-color"
+      register: results
+    - name: show plan results
+      debug:
+        msg: "{{results}}"
